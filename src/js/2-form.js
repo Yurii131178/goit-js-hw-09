@@ -1,4 +1,39 @@
+
 const form = document.querySelector(".feedback-form");
+let formData = { email: "", message: "" };
+const localStorageKey = "feedback-form-state";
+
+
+const storedData = localStorage.getItem(localStorageKey);
+if (storedData) {
+    formData = JSON.parse(storedData);
+    form.elements.email.value = formData.email;
+    form.elements.message.value = formData.message;
+}
+
+form.addEventListener("input", (evt) => {
+    if (evt.target.name === "email") {
+        formData.email = evt.target.value.trim();
+    } else if (evt.target.name === "message") {
+        formData.message = evt.target.value.trim();
+    }
+    localStorage.setItem(localStorageKey, JSON.stringify(formData));
+});
+
+
+form.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+
+    if (formData.email.trim() === "" || formData.message.trim() === "") {
+        alert("Please fill in all field");
+        return;
+    }
+
+    console.log(formData);
+    localStorage.removeItem(localStorageKey);
+    form.reset();
+});
+
 const labels = form.querySelectorAll("label");
 const emailInput = form.elements['email'];
 const messageTextarea = form.elements['message'];
@@ -61,6 +96,3 @@ submitButton.addEventListener('mouseover', () => {
 submitButton.addEventListener('mouseout', () => {
     submitButton.style.backgroundColor = "#4E75FF";
 });
-
-
-
